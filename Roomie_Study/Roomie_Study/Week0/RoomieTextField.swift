@@ -53,5 +53,7 @@ class RoomieTextField: UITextField {
         let leftPadding = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 16))
         leftView = leftPadding
         leftViewMode = .always
+        autocapitalizationType = .none
+        autocorrectionType = .no
     }
 }
