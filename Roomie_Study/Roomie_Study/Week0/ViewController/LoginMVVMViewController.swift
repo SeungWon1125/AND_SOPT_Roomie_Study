@@ -39,6 +39,7 @@ final class LoginMVVMViewController: UIViewController {
         rootView.passwordTextField.delegate = self
     }
     
+    // 뷰 모델
     private func isUserValid(user: User) -> Bool {
         return user.id == "roomienotty" && user.password == "guhappyshare" ? true : false
     }
@@ -51,6 +52,7 @@ final class LoginMVVMViewController: UIViewController {
         user = User(id: id, password: password)
         
         // 이 부분에서 서버와 통신 후 올바른 id와 password인지 판단할 것 같다
+        // 이 친구도 Bool값으로 뷰모델한테 전달받으면 좋을 거 같은데
         if isUserValid(user: user) {
             AlertManager
                 .showAlert(
@@ -82,6 +84,7 @@ extension LoginMVVMViewController: UITextFieldDelegate {
         let currentText = textField.text ?? ""
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
         
+        // 이 아래의 부분도 뷰모델로 보내고 싶다..
         let isIDValid = (
             textField == rootView.idTextField
         ) ? updatedText.count >= 5 : rootView.idTextField.text?.count ?? 0 >= 5
