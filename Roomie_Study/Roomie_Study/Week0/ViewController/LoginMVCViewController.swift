@@ -13,6 +13,8 @@ final class LoginMVCViewController: UIViewController {
     
     private let rootView = LoginView()
     
+    private var user: User = User(id: "", password: "")
+    
     // MARK: - LifeCycle
     
     override func loadView() {
@@ -37,10 +39,26 @@ final class LoginMVCViewController: UIViewController {
         rootView.passwordTextField.delegate = self
     }
     
+    private func isUserValid(user: User) -> Bool {
+        return user.id == "roomienotty" && user.password == "guhappyshare" ? true : false
+    }
+    
     @objc
     private func loginButtonDidTapped() {
-        if rootView.idTextField.text == "roomienotty" && rootView.passwordTextField.text == "guhappyshare" {
-            AlertManager.showAlert(on: self, title: "로그인 성공", message: nil, needsCancelButton: false)
+        guard let id = rootView.idTextField.text,
+              let password = rootView.passwordTextField.text else { return }
+
+        user = User(id: id, password: password)
+        
+        // 이 부분에서 서버와 통신 후 올바른 id와 password인지 판단할 것 같다
+        if isUserValid(user: user) {
+            AlertManager
+                .showAlert(
+                    on: self,
+                    title: "로그인 성공",
+                    message: nil,
+                    needsCancelButton: false
+                )
         } else {
             AlertManager
                 .showAlert(
