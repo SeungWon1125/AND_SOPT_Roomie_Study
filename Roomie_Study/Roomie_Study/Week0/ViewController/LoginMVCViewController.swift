@@ -12,7 +12,6 @@ final class LoginMVCViewController: UIViewController {
     // MARK: - Property
     
     private let rootView = LoginView()
-    
     private var user: User = User(id: "", password: "")
     
     // MARK: - LifeCycle
