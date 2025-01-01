@@ -24,85 +24,80 @@ final class LoginMVVMViewController: UIViewController {
         super.viewDidLoad()
         
         setAction()
-        setDelegate()
+        bindViewModel()
     }
     
     // MARK: - Functions
     
     private func setAction() {
-        rootView.loginButton.addTarget(self, action: #selector(loginButtonDidTapped), for: .touchUpInside)
+        rootView.loginButton
+            .addTarget(
+                self,
+                action: #selector(loginButtonDidTapped),
+                for: .touchUpInside
+            )
+        
+        rootView.idTextField
+            .addTarget(
+                self,
+                action: #selector(textFieldDidChange),
+                for: .editingChanged
+            )
+        
+        rootView.passwordTextField
+            .addTarget(
+                self,
+                action: #selector(textFieldDidChange),
+                for: .editingChanged
+            )
     }
     
-    private func setDelegate() {
-        rootView.idTextField.delegate = self
-        rootView.passwordTextField.delegate = self
-        viewModel.delegate = self
+    private func bindViewModel() {
+        viewModel.isButtonEnabled.bind { [weak self] isButtonEnabled in
+            guard let isButtonEnabled else { return }
+            guard let self else { return }
+            
+            UIView.animate(withDuration: 0.3) {
+                self.rootView.loginButton.isEnabled = isButtonEnabled ? true : false
+                self.rootView.loginButton.backgroundColor = isButtonEnabled ? .mainPurple : .gray2
+            }
+        }
+        
+        viewModel.isLoginSucceed.bind { [weak self] isLoginSucceed in
+            guard let isLoginSucceed else { return }
+            guard let self else { return }
+            
+            if isLoginSucceed {
+                AlertManager
+                    .showAlert(
+                        on: self,
+                        title: "로그인 성공",
+                        message: nil,
+                        needsCancelButton: false
+                    )
+            } else {
+                AlertManager
+                    .showAlert(
+                        on: self,
+                        title: "로그인 실패",
+                        message: "다시 시도하세요",
+                        needsCancelButton: false
+                    )
+            }
+        }
     }
 
     @objc
     private func loginButtonDidTapped() {
         viewModel.login()
     }
-}
-
-// MARK: - UITextFieldDelegate
-
-extension LoginMVVMViewController: UITextFieldDelegate {
-    func textField(
-        _ textField: UITextField,
-        shouldChangeCharactersIn range: NSRange,
-        replacementString string: String
-    ) -> Bool {
-        
-        let currentText = textField.text ?? ""
-        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
-        
-        if textField == rootView.idTextField {
-            viewModel.updateID(updatedText)
-        } else if textField == rootView.passwordTextField {
-            viewModel.updatePassword(updatedText)
-        }
-        
-        return true
-    }
-}
-
-// MARK: - LoginViewModelProtocol
-
-extension LoginMVVMViewController: LoginViewModelDelegate {
-    func loginButtonChange(_ isButtonEnabled: Bool) {
-        if isButtonEnabled {
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                guard let self else { return }
-                rootView.loginButton.isEnabled = true
-                rootView.loginButton.backgroundColor = .mainPurple
-            }
-        } else {
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                guard let self else { return }
-                rootView.loginButton.isEnabled = false
-                rootView.loginButton.backgroundColor = .gray2
-            }
-        }
-    }
     
-    func loginResult(_ isLoginSuccess: Bool) {
-        if isLoginSuccess {
-            AlertManager
-                .showAlert(
-                    on: self,
-                    title: "로그인 성공",
-                    message: nil,
-                    needsCancelButton: false
-                )
+    @objc
+    private func textFieldDidChange(sender: UITextField) {
+        if sender == rootView.idTextField {
+            viewModel.updateID(sender.text ?? "")
         } else {
-            AlertManager
-                .showAlert(
-                    on: self,
-                    title: "로그인 실패",
-                    message: "다시 시도하세요",
-                    needsCancelButton: false
-                )
+            viewModel.updatePassword(sender.text ?? "")
         }
     }
 }
