@@ -7,23 +7,20 @@
 
 import UIKit
 
-class TourViewController: UIViewController {
+final class TourViewController: UIViewController {
+    
+    // MARK: - Property
+    
+    private let rootView = TourView()
+    
+    // MARK: - LifeCycle
+    
+    override func loadView() {
+        view = rootView
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
