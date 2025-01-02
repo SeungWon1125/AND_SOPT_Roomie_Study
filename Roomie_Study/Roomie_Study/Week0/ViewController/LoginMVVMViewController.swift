@@ -33,7 +33,7 @@ final class LoginMVVMViewController: UIViewController {
         rootView.loginButton
             .addTarget(
                 self,
-                action: #selector(loginButtonDidTapped),
+                action: #selector(loginButtonDidTap),
                 for: .touchUpInside
             )
         
@@ -88,7 +88,7 @@ final class LoginMVVMViewController: UIViewController {
     }
 
     @objc
-    private func loginButtonDidTapped() {
+    private func loginButtonDidTap() {
         viewModel.login()
     }
     
