@@ -18,7 +18,7 @@ final class TourView: UIView {
     
     let applyTourButton = UIButton(type: .system)
     
-    let tourButton = UIButton(type: .system)
+    let startTourButton = UIButton(type: .system)
     
     let contractButton = UIButton(type: .system)
     
@@ -62,7 +62,7 @@ final class TourView: UIView {
             $0.isEnabled = true
         }
         
-        tourButton.do {
+        startTourButton.do {
             $0.setTitle("투어", for: .normal)
             $0.setTitleColor(.white, for: .normal)
             $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
@@ -84,7 +84,7 @@ final class TourView: UIView {
         
         buttonStackView.do {
             $0.addArrangedSubview(applyTourButton)
-            $0.addArrangedSubview(tourButton)
+            $0.addArrangedSubview(startTourButton)
             $0.addArrangedSubview(contractButton)
             $0.spacing = 16
             $0.distribution = .fillEqually
