@@ -26,5 +26,4 @@ final class TourViewModel {
     func writeContract() {
         tourState.value = .endTour
     }
-    
 }

@@ -76,7 +76,6 @@ final class TourViewController: UIViewController {
         print(#function)
         viewModel.writeContract()
     }
-    
 }
 
 extension TourViewController {

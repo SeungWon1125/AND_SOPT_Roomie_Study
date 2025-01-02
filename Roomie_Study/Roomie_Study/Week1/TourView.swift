@@ -40,7 +40,6 @@ final class TourView: UIView {
     
     // MARK: - UISetting
 
-    
     private func setStyle() {
         self.backgroundColor = .white
         
@@ -109,6 +108,5 @@ final class TourView: UIView {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(180 + 32)
         }
-        
     }
 }
