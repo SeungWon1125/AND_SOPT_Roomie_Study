@@ -88,7 +88,7 @@ final class LoginMVVMViewController: UIViewController {
     }
 
     @objc
-    private func loginButtonDidTapped() {
+    private func loginButtonDidTap() {
         viewModel.login()
     }
     
