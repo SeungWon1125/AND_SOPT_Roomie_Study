@@ -45,7 +45,7 @@ final class TourView: UIView {
         self.backgroundColor = .white
         
         titleLabel.do {
-            $0.text = "진행 현황이 존재하지 않아요\n투어 신청을 시작해보아요"
+            $0.text = " "
             $0.textColor = .black
             $0.font = .systemFont(ofSize: 24, weight: .semibold)
             $0.numberOfLines = 2
@@ -56,10 +56,10 @@ final class TourView: UIView {
             $0.setTitle("투어 신청", for: .normal)
             $0.setTitleColor(.white, for: .normal)
             $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
-            $0.backgroundColor = .mainPurple
+            $0.backgroundColor = .mainPurpleLight
             $0.layer.cornerRadius = 12
             $0.clipsToBounds = true
-            $0.isEnabled = true
+            $0.isEnabled = false
         }
         
         startTourButton.do {
