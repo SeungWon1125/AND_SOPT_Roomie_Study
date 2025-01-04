@@ -10,6 +10,7 @@ import Foundation
 final class LoginViewModel {
     
     // MARK: - Property
+    
     var isButtonEnabled = Observable<Bool>.init(false)
     var isLoginSucceed = Observable<Bool>.init(nil)
     private var user: User = User(id: "", password: "")
