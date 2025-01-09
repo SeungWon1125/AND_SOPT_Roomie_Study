@@ -20,6 +20,7 @@ final class LoginCombineViewController: UIViewController {
     
     private let idSubject = CurrentValueSubject<String, Never>("")
     private let passwordSubject = CurrentValueSubject<String, Never>("")
+    private let tapSubject = PassthroughSubject<Void, Never>()
     
     // MARK: - LifeCycle
     
@@ -55,38 +56,20 @@ final class LoginCombineViewController: UIViewController {
             }
             .store(in: cancelBag)
         
-//        rootView.loginButton
-//            .tapPublisher
-//            .sink { [weak self] _ in
-//                guard let self else { return }
-//                let id = self.rootView.idTextField.text ?? ""
-//                let password = self.rootView.passwordTextField.text ?? ""
-//                
-//                if id == "roomienotty" && password == "guhappyshare" {
-//                    AlertManager
-//                        .showAlert(
-//                            on: self,
-//                            title: "로그인 성공",
-//                            message: nil,
-//                            needsCancelButton: false
-//                        )
-//                } else {
-//                    AlertManager
-//                        .showAlert(
-//                            on: self,
-//                            title: "로그인 실패",
-//                            message: "다시 시도하세요",
-//                            needsCancelButton: false
-//                        )
-//                }
-//            }
-//            .store(in: cancelBag)
+        rootView.loginButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self else { return }
+                self.tapSubject.send()
+            }
+            .store(in: cancelBag)
     }
     
     private func bindViewModel() {
         let input = LoginCombineViewModel.Input(
             idText: idSubject.eraseToAnyPublisher(),
-            passwordText: passwordSubject.eraseToAnyPublisher()
+            passwordText: passwordSubject.eraseToAnyPublisher(),
+            tapSubject: tapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -97,6 +80,30 @@ final class LoginCombineViewController: UIViewController {
                 UIView.animate(withDuration: 0.3) {
                     self.rootView.loginButton.isEnabled = buttonEnabled
                     self.rootView.loginButton.backgroundColor = buttonEnabled ? .mainPurple: .gray2
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.loginSuccess
+            .sink { [weak self] loginSuccess in
+                guard let self else { return }
+                
+                if loginSuccess {
+                    AlertManager
+                        .showAlert(
+                            on: self,
+                            title: "로그인 성공",
+                            message: nil,
+                            needsCancelButton: false
+                        )
+                } else {
+                    AlertManager
+                        .showAlert(
+                            on: self,
+                            title: "로그인 실패",
+                            message: "다시 시도하세요",
+                            needsCancelButton: false
+                        )
                 }
             }
             .store(in: cancelBag)
