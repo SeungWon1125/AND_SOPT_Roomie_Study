@@ -6,44 +6,31 @@
 //
 
 import Foundation
+import Combine
 
 final class LoginCombineViewModel {
     
-    // MARK: - Property
-    
-    var id: String = "" {
-        didSet {
-            print("ReactiveViewModel: 입력받은 id \(id)")
-            buttonValid()
-        }
+}
+
+extension LoginCombineViewModel: ViewModelType {
+    struct Input {
+        let idText: AnyPublisher<String, Never>
+        let passwordText: AnyPublisher<String, Never>
     }
     
-    var password: String = "" {
-        didSet {
-            print("ReactiveViewModel: 입력받은 password \(password)")
-            buttonValid()
-        }
+    struct Output {
+        let buttonEnabled: AnyPublisher<Bool, Never>
     }
     
-    var buttonToggle: Bool = false {
-        didSet {
-            print("ReactiveViewModel: 버튼 눌림")
-            LoginValid()
-        }
+    func transform(from input: Input, cancelBag: CancelBag) -> Output {
+        let buttonEnabled = input.idText
+            .combineLatest(input.passwordText)
+            .map { $0.count >= 5 && $1.count >= 8 }
+            .eraseToAnyPublisher()
+        
+        return Output (buttonEnabled: buttonEnabled)
     }
     
-    var isButtonEnabled = Observable<Bool>.init(false)
-    var isLoginSucceed = Observable<Bool>.init(nil)
-    
-    // MARK: - Property
-    
-    private func buttonValid() {
-        isButtonEnabled.value = id.count >= 5 && password.count >= 8 ? true : false
-    }
-    
-    private func LoginValid() {
-        isLoginSucceed.value = id == "roomienotty" && password == "guhappyshare"
-    }
     
 }
 
