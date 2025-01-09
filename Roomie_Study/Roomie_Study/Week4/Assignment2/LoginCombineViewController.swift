@@ -42,7 +42,6 @@ final class LoginCombineViewController: UIViewController {
             .map { id, password in
                 id.count >= 5 && password.count >= 8
             }
-            .receive(on: RunLoop.main)
             .sink { [weak self] isValid in
                 guard let self else { return }
                 self.rootView.loginButton.isEnabled = isValid
