@@ -6,96 +6,77 @@
 //
 
 import UIKit
+import Combine
+
+import CombineCocoa
 
 final class LoginCombineViewController: UIViewController {
     
     // MARK: - Property
     
     private let rootView = LoginView()
-    private let viewModel = LoginCombineViewModel()
+    //    private let viewModel = LoginCombineViewModel()
+    
+    private let cancelBag = CancelBag()
     
     // MARK: - LifeCycle
     
     override func loadView() {
         view = rootView
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setAction()
-        bindViewModel()
     }
     
     // MARK: - Functions
     
     private func setAction() {
-        rootView.idTextField.addTarget(
-            self,
-            action: #selector(textFieldDidChange),
-            for: .editingChanged
-        )
-        
-        rootView.passwordTextField.addTarget(
-            self,
-            action: #selector(textFieldDidChange),
-            for: .editingChanged
-        )
-        
-        rootView.loginButton.addTarget(
-            self,
-            action: #selector(loginButtonDidTap),
-            for: .touchUpInside
-        )
-    }
-    
-    private func bindViewModel() {
-        viewModel.isButtonEnabled.bind { [weak self] isButtonEnabled in
-            guard let isButtonEnabled else { return }
-            guard let self else { return }
-            
-            UIView.animate(withDuration: 0.3) {
-                self.rootView.loginButton.isEnabled = isButtonEnabled ? true : false
-                self.rootView.loginButton.backgroundColor = isButtonEnabled ? .mainPurple : .gray2
+        Publishers
+            .CombineLatest(
+                rootView.idTextField.textPublisher.compactMap { $0 },
+                rootView.passwordTextField.textPublisher.compactMap { $0 }
+            )
+            .map { id, password in
+                id.count >= 5 && password.count >= 8
             }
-        }
-        
-        viewModel.isLoginSucceed.bind { [weak self] isLoginSucceed in
-            guard let isLoginSucceed else { return }
-            guard let self else { return }
-            
-            if isLoginSucceed {
-                AlertManager
-                    .showAlert(
-                        on: self,
-                        title: "로그인 성공",
-                        message: nil,
-                        needsCancelButton: false
-                    )
-            } else {
-                AlertManager
-                    .showAlert(
-                        on: self,
-                        title: "로그인 실패",
-                        message: "다시 시도하세요",
-                        needsCancelButton: false
-                    )
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isValid in
+                guard let self else { return }
+                self.rootView.loginButton.isEnabled = isValid
+                UIView.animate(withDuration: 0.3) {
+                    self.rootView.loginButton.backgroundColor = isValid ? .mainPurple : .gray2
+                }
             }
-        }
+            .store(in: cancelBag)
+        
+        rootView.loginButton
+            .tapPublisher
+            .sink { [weak self] _ in
+                guard let self else { return }
+                let id = self.rootView.idTextField.text ?? ""
+                let password = self.rootView.passwordTextField.text ?? ""
+                
+                if id == "roomienotty" && password == "guhappyshare" {
+                    AlertManager
+                        .showAlert(
+                            on: self,
+                            title: "로그인 성공",
+                            message: nil,
+                            needsCancelButton: false
+                        )
+                } else {
+                    AlertManager
+                        .showAlert(
+                            on: self,
+                            title: "로그인 실패",
+                            message: "다시 시도하세요",
+                            needsCancelButton: false
+                        )
+                }
+            }
+            .store(in: cancelBag)
     }
-    
-    @objc
-    private func loginButtonDidTap() {
-        viewModel.buttonToggle.toggle()
-    }
-    
-    @objc
-    private func textFieldDidChange(sender: UITextField) {
-        if sender == rootView.idTextField {
-            viewModel.id = sender.text ?? ""
-        } else {
-            viewModel.password = sender.text ?? ""
-        }
-    }
-
 }
