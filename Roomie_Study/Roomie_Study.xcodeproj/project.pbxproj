@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E3160C872D2185E400ED4D54 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E3160C862D2185E400ED4D54 /* SnapKit */; };
 		E3160C8A2D2185F800ED4D54 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = E3160C892D2185F800ED4D54 /* Then */; };
+		E35DB4B62D2FA8B0003DD0B6 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = E35DB4B52D2FA8B0003DD0B6 /* CombineCocoa */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3160C872D2185E400ED4D54 /* SnapKit in Frameworks */,
+				E35DB4B62D2FA8B0003DD0B6 /* CombineCocoa in Frameworks */,
 				E3160C8A2D2185F800ED4D54 /* Then in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				E3160C862D2185E400ED4D54 /* SnapKit */,
 				E3160C892D2185F800ED4D54 /* Then */,
+				E35DB4B52D2FA8B0003DD0B6 /* CombineCocoa */,
 			);
 			productName = Roomie_Study;
 			productReference = E34C526F2D1E973800261F57 /* Roomie_Study.app */;
@@ -119,6 +122,7 @@
 			packageReferences = (
 				E3160C852D2185E400ED4D54 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				E3160C882D2185F800ED4D54 /* XCRemoteSwiftPackageReference "Then" */,
+				E35DB4B42D2FA8B0003DD0B6 /* XCRemoteSwiftPackageReference "CombineCocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E34C52702D1E973800261F57 /* Products */;
@@ -366,6 +370,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		E35DB4B42D2FA8B0003DD0B6 /* XCRemoteSwiftPackageReference "CombineCocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CombineCommunity/CombineCocoa.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -378,6 +390,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E3160C882D2185F800ED4D54 /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
+		};
+		E35DB4B52D2FA8B0003DD0B6 /* CombineCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E35DB4B42D2FA8B0003DD0B6 /* XCRemoteSwiftPackageReference "CombineCocoa" */;
+			productName = CombineCocoa;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
